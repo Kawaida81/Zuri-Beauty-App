@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Dashboard - Zuri Beauty</title>
+    <link rel="stylesheet" href="styles/worker-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="logo">
+                    <img src="images/logo.png" alt="Zuri Beauty Logo">
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="products">
+                    <i class="fas fa-box"></i>
+                    <span>Product/Service</span>
+                </a>
+                <a href="#" class="nav-item" data-section="sales">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Sales</span>
+                </a>
+                <a href="#" class="nav-item" data-section="bookings">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Bookings</span>
+                </a>
+                <a href="#" class="nav-item" data-section="stock">
+                    <i class="fas fa-boxes"></i>
+                    <span>Stock</span>
+                </a>
+                <a href="#" class="nav-item logout-nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+
+            
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content section-content">
+            <!-- Top Section -->
+            <div class="top-section">
+                <!-- Sales Summary Card -->
+                <div class="card">
+                    <h2>Sales Summary</h2>
+                    <div class="sales-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Today's Sales</span>
+                            <span class="stat-value" id="todaySales">Ksh 0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Top Product</span>
+                            <span class="stat-value" id="topProduct">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Low Stock Alerts Card -->
+                <div class="card">
+                    <h2>Low Stock Alerts</h2>
+                    <div class="low-stock-list" id="lowStockList">
+                        <p class="empty-state">No low stock items</p>
+                    </div>
+                </div>
+
+                <!-- Today's Bookings Card -->
+                <div class="card today-bookings">
+                    <div class="card-header">
+                        <h2>Today's Bookings</h2>
+                    </div>
+                    <div class="bookings-list" id="todayBookings">
+                        <div class="booking-filters">
+                            <select class="status-filter" id="todayBookingFilter">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="bookings-scroll">
+                            <div class="booking-item">
+                                <div class="booking-service">Hair Styling</div>
+                                <div class="booking-client">Client: Jane Doe</div>
+                                <div class="booking-time">10:00 AM</div>
+                                <span class="booking-status pending">Pending</span>
+                            </div>
+                            <div class="booking-item">
+                                <div class="booking-service">Manicure</div>
+                                <div class="booking-client">Client: Alice Smith</div>
+                                <div class="booking-time">2:30 PM</div>
+                                <span class="booking-status confirmed">Confirmed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="bottom-section">
+                <!-- Recent Activities Card -->
+                <div class="card">
+                    <h2>Recent Activities</h2>
+                    <div class="activities-list" id="activitiesList"></div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Products/Services Section -->
+        <div class="products-page section-content" style="display: none;">
+            <div class="page-header">
+                <h1>Products & Services Management</h1>
+                <div class="header-actions">
+                    <button class="add-btn" id="addProductBtn">
+                        <i class="fas fa-box"></i> Add Product
+                    </button>
+                    <button class="add-btn service-btn" id="addServiceBtn">
+                        <i class="fas fa-concierge-bell"></i> Add Service
+                    </button>
+                </div>
+            </div>
+
+            <div class="products-grid">
+                <!-- Inventory Management Card -->
+                <div class="card">
+                    <h2>Inventory Management</h2>
+                    <div class="search-bar">
+                        <input type="text" id="productSearch" class="search-filter" placeholder="Search products...">
+                        <select id="categoryFilter" class="category-filter">
+                            <option value="">All Categories</option>
+                            <option value="hair">Hair Care</option>
+                            <option value="skin">Skin Care</option>
+                            <option value="nails">Nail Care</option>
+                            <option value="service">Services</option>
+                        </select>
+                    </div>
+                    <div class="products-list" id="productsList"></div>
+                </div>
+
+                <!-- Product Statistics Card -->
+                <div class="card">
+                    <h2>Statistics Overview</h2>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Products</span>
+                            <span class="stat-value" id="totalProducts">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Services</span>
+                            <span class="stat-value" id="totalServices">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Low Stock Items</span>
+                            <span class="stat-value" id="lowStockCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Inventory Value</span>
+                            <span class="stat-value" id="inventoryValue">Ksh 0</span>
+                        </div>
+                    </div>
+
+                    <!-- Most Popular Items -->
+                    <div class="popular-items">
+                        <h3>Popular Items</h3>
+                        <div class="summary-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Top Product</span>
+                                <span class="stat-value" id="popularProduct">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Top Service</span>
+                                <span class="stat-value" id="popularService">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales Page Section -->
+        <div class="sales-page section-content" style="display: none;">
+            <div class="page-header">
+                <h1>Sales Management</h1>
+                <div class="header-actions">
+                    <button class="add-btn" id="newProductSaleBtn">
+                        <i class="fas fa-box"></i> Product Sale
+                    </button>
+                    <button class="add-btn service-btn" id="newServiceSaleBtn">
+                        <i class="fas fa-concierge-bell"></i> Service Sale
+                    </button>
+                </div>
+            </div>
+
+            <div class="sales-grid">
+                <!-- Sales Tables -->
+                <div class="card">
+                    <div class="sales-tabs">
+                        <button class="tab-btn active" data-tab="products">Products Sales</button>
+                        <button class="tab-btn" data-tab="services">Services Sales</button>
+                    </div>
+
+                    <div class="sales-list" id="recentSalesList">
+                        <div class="sales-filters">
+                            <input type="date" id="salesDateFilter" class="date-filter">
+                            <select id="salesPaymentFilter" class="payment-filter">
+                                <option value="">All Payment Methods</option>
+                                <option value="cash">Cash</option>
+                                <option value="card">Card</option>
+                                <option value="mpesa">M-Pesa</option>
+                            </select>
+                        </div>
+
+                        <!-- Products Sales Table -->
+                        <div class="sales-table-container tab-content active" id="productsTab">
+                            <table class="sales-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Discount</th>
+                                        <th>Total</th>
+                                        <th>Payment</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productSalesTableBody"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- Services Sales Table -->
+                        <div class="sales-table-container tab-content" id="servicesTab">
+                            <table class="sales-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Service</th>
+                                        <th>Client</th>
+                                        <th>Price</th>
+                                        <th>Discount</th>
+                                        <th>Total</th>
+                                        <th>Payment</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="serviceSalesTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales Summary Card -->
+                <div class="card">
+                    <h2>Sales Summary</h2>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Product Sales</span>
+                            <span class="stat-value" id="productSalesToday">Ksh 0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Service Sales</span>
+                            <span class="stat-value" id="serviceSalesToday">Ksh 0</span>
+                        </div>
+                        <div class="stat-item total-sales">
+                            <span class="stat-label">Total Sales</span>
+                            <span class="stat-value" id="totalSalesToday">Ksh 0</span>
+                        </div>
+                    </div>
+
+                    <div class="sales-charts">
+                        <div class="chart-container">
+                            <h3>Top Products</h3>
+                            <div class="top-items" id="topProducts"></div>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Top Services</h3>
+                            <div class="top-items" id="topServices"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Management Section -->
+        <div class="stock-page section-content" style="display: none;">
+            <div class="page-header">
+                <h1>Stock Management</h1>
+            </div>
+
+            <div class="stock-grid">
+                <!-- Stock Adjustment Card -->
+                <div class="card">
+                    <h2>Inventory Management</h2>
+                    <div class="search-bar">
+                        <input type="text" id="stockProductSearch" placeholder="Search products...">
+                        <select id="stockCategoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="hair">Hair Care</option>
+                            <option value="skin">Skin Care</option>
+                            <option value="nails">Nail Care</option>
+                        </select>
+                    </div>
+                    <div class="stock-table-container">
+                        <table class="stock-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Current Stock</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Stock History Card -->
+                <div class="card">
+                    <h2>Stock History</h2>
+                    <div class="stock-history-list" id="stockHistoryList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Section -->
+        <div class="bookings-page section-content" style="display: none;">
+            <div class="page-header">
+                <h1>Bookings Management</h1>
+                <div class="header-actions">
+                    <button class="add-btn" id="exportBookingsBtn">
+                        <i class="fas fa-download"></i> Export Bookings
+                    </button>
+                </div>
+            </div>
+
+            <div class="bookings-grid">
+                <!-- Today's Bookings Card -->
+                <div class="card">
+                    <h2>Appointments</h2>
+                    <div class="bookings-filters">
+                        <input type="date" id="bookingsDateFilter" class="date-filter" title="Filter by date">
+                        <select id="bookingsStatusFilter" class="status-filter" title="Filter by status">
+                            <option value="">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="bookings-list" id="bookingsList">
+                        <!-- Bookings will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Booking Statistics Card -->
+                <div class="card">
+                    <h2>Booking Statistics</h2>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Today's Bookings</span>
+                            <span class="stat-value" id="bookingsCountToday">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Pending Confirmation</span>
+                            <span class="stat-value" id="pendingBookings">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Most Booked Service</span>
+                            <span class="stat-value" id="mostBookedService">-</span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Adjustment Modal -->
+        <div class="modal" id="stockModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Adjust Stock</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <form id="stockForm">
+                    <div class="form-group">
+                        <label for="stockProductName">Product</label>
+                        <input type="text" id="stockProductName" readonly>
+                        <input type="hidden" id="stockProductId">
+                    </div>
+                    <div class="form-group">
+                        <label for="currentStock">Current Stock</label>
+                        <input type="number" id="currentStock" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="stockAdjustment">Adjustment (+/-)</label>
+                        <input type="number" id="stockAdjustment" required>
+                        <small class="form-help">Enter positive number to add stock, negative to remove</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="adjustmentReason">Reason</label>
+                        <select id="adjustmentReason" required>
+                            <option value="restock">Restock</option>
+                            <option value="damage">Damaged/Expired</option>
+                            <option value="correction">Inventory Correction</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adjustmentNotes">Notes</label>
+                        <textarea id="adjustmentNotes" rows="2"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">Update Stock</button>
+                        <button type="button" class="cancel-btn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add/Edit Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Product</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" name="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory" name="productCategory" required>
+                        <option value="hair">Hair Care</option>
+                        <option value="skin">Skin Care</option>
+                        <option value="nails">Nail Care</option>
+                        <option value="makeup">Makeup</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price (Ksh)</label>
+                    <input type="number" id="productPrice" name="productPrice" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="productStock">Stock Quantity</label>
+                    <input type="number" id="productStock" name="productStock" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description</label>
+                    <textarea id="productDescription" name="productDescription" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="save-btn">Save Product</button>
+                    <button type="button" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sales Modal -->
+    <div class="modal" id="salesModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Record Sale</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form id="salesForm">
+                <div class="form-group">
+                    <label for="saleProduct">Product</label>
+                    <select id="saleProduct" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="saleQuantity">Quantity</label>
+                    <input type="number" id="saleQuantity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="saleDiscount">Discount (%)</label>
+                    <input type="number" id="saleDiscount" min="0" max="100" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="salePayment">Payment Method</label>
+                    <select id="salePayment" required>
+                        <option value="cash">Cash</option>
+                        <option value="card">Card</option>
+                        <option value="mpesa">M-Pesa</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="save-btn">Complete Sale</button>
+                    <button type="button" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/worker-dashboard.js"></script>
+</body>
+</html> 

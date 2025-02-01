@@ -1,0 +1,10 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/workers/page": "app/workers/page.js",
+  "/api/workers/schedules/route": "app/api/workers/schedules/route.js",
+  "/sales/page": "app/sales/page.js",
+  "/api/workers/route": "app/api/workers/route.js",
+  "/api/sales/route": "app/api/sales/route.js",
+  "/api/workers/performance/route": "app/api/workers/performance/route.js"
+}

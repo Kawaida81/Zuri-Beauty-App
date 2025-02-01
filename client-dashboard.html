@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - Zuri Beauty</title>
+    <link rel="stylesheet" href="styles/client-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h1>Welcome, <span id="clientName">!</span></h1>
+            <div class="header-icons">
+                <a href="/browse-services" class="browse-services-icon" title="Browse Services">
+                    <i class="fas fa-search"></i>
+                </a>
+                <div class="notifications-wrapper">
+                    <button class="notifications-icon" id="notificationsButton" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notifications-badge" id="notificationsBadge">2</span>
+                    </button>
+                    <div class="notifications-popover" id="notificationsPopover">
+                        <div class="notifications-header">
+                            <h3>Notifications</h3>
+                            <button class="mark-read-btn" id="markAllRead">Mark all as read</button>
+                        </div>
+                        <div class="notifications-divider"></div>
+                        <div class="notifications-list" id="notificationsList">
+                            <!-- Notifications will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                <a href="./profile.html" class="profile-icon" title="My Profile">
+                    <i class="fas fa-user"></i>
+                </a>
+                <a href="/logout" class="logout-btn">Logout</a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div class="content-grid">
+                <!-- Left Column -->
+                <section class="schedule-section">
+                    <h2>Schedule an Appointment</h2>
+                    <form id="appointmentForm">
+                        <div class="form-group">
+                            <label for="service">Select Service</label>
+                            <select id="service" required>
+                                <option value="">Choose a service...</option>
+                                <option value="haircut">Haircut</option>
+                                <option value="manicure">Manicure</option>
+                                <option value="pedicure">Pedicure</option>
+                                <option value="facial">Facial</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date">Select Date</label>
+                            <input type="date" id="date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time">Select Time</label>
+                            <select id="time" required>
+                                <option value="">Select a time...</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="book-btn">Book Appointment</button>
+                    </form>
+                </section>
+
+                <!-- Right Column -->
+                <div class="right-column">
+                    <section class="appointments-section">
+                        <h2>My Appointments</h2>
+                        <div class="appointments-list" id="appointmentsList">
+                            <!-- Appointments will be populated here -->
+                            <p class="no-appointments">No appointments found</p>
+                        </div>
+                    </section>
+
+                    <!-- Feedback Section (Initially Hidden) -->
+                    <section class="feedback-section" id="feedbackSection" style="display: none;">
+                        <h2>Rate Your Experience</h2>
+                        <div class="rating-container">
+                            <div class="stars">
+                                <i class="far fa-star" data-rating="1"></i>
+                                <i class="far fa-star" data-rating="2"></i>
+                                <i class="far fa-star" data-rating="3"></i>
+                                <i class="far fa-star" data-rating="4"></i>
+                                <i class="far fa-star" data-rating="5"></i>
+                            </div>
+                            <textarea 
+                                class="feedback-text" 
+                                placeholder="Share your experience..."
+                                rows="4"
+                            ></textarea>
+                            <button class="submit-feedback-btn" type="button">
+                                Submit Feedback
+                                <span class="loading-spinner" style="display: none;"></span>
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/client-dashboard.js"></script>
+</body>
+</html> 
